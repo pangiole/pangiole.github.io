@@ -1,0 +1,15 @@
+# --- Build products (generated — never committed) ---------------------------
+# Zola build output, plus staging dirs such as `zola build -o public_staging`.
+/public
+/public_*
+
+# mdBook output for the books under books/<slug>/ (built by scripts/build-books.sh
+# and copied into static/books/ before the Zola build). Never commit build output:
+# the book *sources* live in git submodules, whose own build output belongs to
+# those repositories, not to this one.
+/static/books/
+
+# --- Editors / OS ------------------------------------------------------------
+.idea/
+.DS_Store
+*.swp

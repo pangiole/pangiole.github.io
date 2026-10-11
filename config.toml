@@ -1,0 +1,95 @@
+# ---------------------------------------------------------------------------
+# Site configuration — Zola + tabi
+# Docs: https://www.getzola.org/documentation/getting-started/configuration/
+# Theme: https://welpo.github.io/tabi
+# ---------------------------------------------------------------------------
+
+base_url = "https://pangiole.github.io/"
+title = "Paolo Angioletti"
+description = "Paolo Angioletti — Software Engineer. Articles, books, and curriculum."
+author = "Paolo Angioletti"
+
+theme = "tabi"
+
+# Build options
+compile_sass = true
+minify_html = true
+build_search_index = true
+generate_feeds = true
+default_language = "en"
+
+taxonomies = [{ name = "tags", feed = true }]
+
+[search]
+include_title = true
+include_description = true
+include_path = true
+include_content = true
+index_format = "elasticlunr_json"
+
+[markdown]
+bottom_footnotes = true
+smart_punctuation = true
+# Add an indicator (↗) next to external links.
+external_links_class = "external"
+# Render GitHub-style alerts, e.g. `> [!NOTE]`.
+github_alerts = true
+
+[markdown.highlighting]
+theme = "catppuccin-frappe"
+style = "class"
+
+# LinkedIn returns HTTP 999 to non-browser clients, so skip it during `zola check`.
+[link_checker]
+skip_prefixes = ["https://www.linkedin.com/"]
+
+# ---------------------------------------------------------------------------
+# tabi theme settings
+# ---------------------------------------------------------------------------
+[extra]
+# JavaScript dark/light toggler; empty default_theme follows the OS preference.
+theme_switcher = true
+default_theme = ""
+
+# Colour scheme. Options: blue, lavender, mint, red, sakura, teal, monochrome,
+# lowcontrast_orange, lowcontrast_peach, lowcontrast_pink, indigo_ingot, evangelion.
+skin = "teal"
+
+# Favicon (a real file — the emoji data-URI is mangled by minify_html).
+favicon = "img/favicon.png"
+
+# Browser toolbar colour for light/dark mode.
+browser_theme_color = ["#ffffff", "#202b2d"]
+
+# Show reading time and date on articles.
+show_reading_time = true
+show_date = true
+
+# Link to this repository (used by the footer "Powered by" line).
+remote_repository_url = "https://github.com/pangiole/pangiole.github.io"
+remote_repository_git_platform = "auto"
+remote_repository_branch = "main"
+show_remote_changes = true
+show_remote_source = true
+
+# Main navigation.
+menu = [
+    { name = "curriculum", url = "curriculum", trailing_slash = true },
+    { name = "projects", url = "projects", trailing_slash = true },
+    { name = "articles", url = "articles", trailing_slash = true },
+    { name = "books", url = "books", trailing_slash = true },
+]
+
+# Footer social icons (icons live in the theme's static/social_icons).
+socials = [
+    { name = "github", url = "https://github.com/pangiole", icon = "github" },
+    { name = "linkedin", url = "https://www.linkedin.com/in/paolo-angioletti/", icon = "linkedin" },
+]
+
+# Representative h-card (IndieWeb).
+[extra.hcard]
+enable = true
+full_name = "Paolo Angioletti"
+biography = "Software Engineer."
+avatar = "img/profile.webp"
+with_social_links = true
