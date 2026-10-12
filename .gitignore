@@ -3,7 +3,7 @@
 /public
 /public_*
 
-# mdBook output for the books under books/<slug>/ (built by scripts/build-books.sh
+# mdBook output for the books under books/<slug>/ (built by books/build.sh
 # and copied into static/books/ before the Zola build). Never commit build output:
 # the book *sources* live in git submodules, whose own build output belongs to
 # those repositories, not to this one.

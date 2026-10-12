@@ -1,0 +1,47 @@
+name: Update book submodules
+
+on:
+  repository_dispatch:
+    types: [update-books]
+  workflow_dispatch:   # manual fallback
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-books
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (with book submodules)
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+          token: ${{ secrets.BUMP_GITLINKS_TOKEN }}
+
+      - name: Bump every book submodule to its latest commit
+        run: |
+          while IFS= read -r path; do
+            case "$path" in
+              books/*)
+                echo "==> Bumping '${path}' to latest"
+                git submodule update --remote -- "$path"
+                git add "$path"
+                ;;
+            esac
+          done < <(git config -f .gitmodules --get-regexp '^submodule\..*\.path$' | awk '{print $2}')
+
+          if git diff --cached --quiet; then
+            echo "No change — book submodules already up to date."
+            exit 0
+          fi
+
+      - name: Commit and push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Bump book submodules"
+          git push

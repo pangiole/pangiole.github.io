@@ -17,12 +17,13 @@ content/
   articles/                 Short articles (/articles/<slug>/)
   books/_index.md           Books index page (/books/) — a curated list
 books/<slug>/               Git submodules with the mdBook sources (/books/<slug>/)
-scripts/build-books.sh      Builds every book into static/books/<slug>/
+books/build.sh              Builds every book into static/books/<slug>/
 static/
   img/profile.*             Profile photo (placeholder — replace it!)
   books/                    Generated mdBook output (git-ignored)
 themes/tabi                 tabi theme (git submodule)
 .github/workflows/deploy.yml  Build + deploy to GitHub Pages
+.github/workflows/update-books.yml  Bump book submodules on dispatch
 ```
 
 ## Requirements
@@ -44,18 +45,18 @@ cd pangiole.github.io
 git submodule update --init --recursive
 
 # Build the books into static/books/, then build/serve the site:
-./scripts/build-books.sh
+./books/build.sh
 zola serve            # http://127.0.0.1:1111
 ```
 
 `zola serve` rebuilds the Zola content on change. It does **not** rebuild the
-books — re-run `./scripts/build-books.sh` after editing a book, then refresh.
+books — re-run `./books/build.sh` after editing a book, then refresh.
 
-To produce the final output: `./scripts/build-books.sh && zola build` (writes to `public/`).
+To produce the final output: `./books/build.sh && zola build` (writes to `public/`).
 
 ## How the books work
 
-Every book is a git submodule under `books/<slug>/`. `scripts/build-books.sh`
+Every book is a git submodule under `books/<slug>/`. `books/build.sh`
 auto-detects each book's mdBook root (`<slug>/docs/book.toml` or
 `<slug>/book.toml`) and builds it to `static/books/<slug>/`. Zola then copies
 `static/` into `public/`, so each book is served at `/books/<slug>/` while the
@@ -74,7 +75,7 @@ git commit -m "Add <slug> book submodule"
 ```
 
 Then add an entry to `content/books/_index.md` (title + one-line description +
-link to `/books/<slug>/`). Run `./scripts/build-books.sh && zola build` to verify.
+link to `/books/<slug>/`). Run `./books/build.sh && zola build` to verify.
 
 > [!TIP]
 > Each book repository should disable its own GitHub Pages workflow, so the book
@@ -86,11 +87,31 @@ link to `/books/<slug>/`). Run `./scripts/build-books.sh && zola build` to verif
 
 1. Checkout **with submodules**.
 2. Install Zola, mdBook, and mdbook-mermaid.
-3. `./scripts/build-books.sh` → builds the books.
+3. `./books/build.sh` → builds the books.
 4. `zola build` → writes `public/`.
 5. Upload `public/` as a Pages artifact and deploy it.
 
 In **Settings → Pages**, set the source to **GitHub Actions**.
+
+### Automatic book updates
+
+Each book repository (e.g. `oauth2-client`) dispatches an `update-books` event
+to this repo whenever it is pushed to `main`. `.github/workflows/update-books.yml`
+then bumps **every** submodule found under `books/` to its latest commit,
+commits the new gitlinks, and pushes — which retriggers `deploy.yml`, so the
+site redeploys with the fresh book. No manual gitlink bumping required.
+
+Two repository secrets are needed (both fine-grained PATs with
+**Contents: Read and write** on `pangiole/pangiole.github.io`):
+
+- **`pangiole.github.io` → `BUMP_GITLINKS_TOKEN`** — used for the checkout and to push
+  the bumped gitlink. A push made with the default `GITHUB_TOKEN` would **not**
+  trigger `deploy.yml`, so a PAT is required here.
+- **`oauth2-client` → `SITE_DISPATCH_TOKEN`** — sends the `repository_dispatch`
+  event into this repo.
+
+The workflow discovers book submodules from `.gitmodules` (any path matching
+`books/*`), so adding a new book submodule is enough — no workflow edit needed.
 
 ## Placeholders to replace
 

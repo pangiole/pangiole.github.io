@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# build-books.sh — build every mdBook under ./books/<slug>/ into
+# build.sh — build every mdBook under ./books/<slug>/ into
 # ./static/books/<slug>/, so Zola copies them into the final `public/` output.
 #
 # Books are added as git submodules under `books/<slug>/`. Before building, each

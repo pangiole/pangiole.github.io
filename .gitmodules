@@ -4,3 +4,4 @@
 [submodule "books/oauth2-client"]
 	path = books/oauth2-client
 	url = https://github.com/pangiole/oauth2-client
+	branch = main
