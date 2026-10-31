@@ -5,3 +5,6 @@
 	path = books/oauth2-client
 	url = https://github.com/pangiole/oauth2-client
 	branch = main
+[submodule "books/serde-ubj"]
+	path = books/serde-ubj
+	url = git@github.com:pangiole/serde-ubj.git

@@ -10,7 +10,17 @@ template = "cards.html"
 These are my longer pieces, written as books and built with
 [mdBook](https://rust-lang.github.io/mdBook/). They live under `/books/<slug>/`.
 
-## How-to implement OAuth2 clients in Rust
+## Walkthrough an OAuth2 Client in Rust
 
-A small book explaining how to implement an OAuth2 / OIDC client application in
-Rust with the Tokio asynchronous runtime. [Read the book →](/books/oauth2-client/)
+This book explains how to implement an OAuth2 / OIDC (OpenID Connect) Client
+application in Rust language using the [Tokio](https://tokio.rs/) asynchronous
+runtime and library stack.  [Read the book →](/books/oauth2-client/)
+
+
+## Walkthrough a Serde format in Rust
+
+This book explains how to implement the Universal Binary JSON 
+serializer/deserializerin Rust language with the [Serde](https://serde.rs/) 
+framework [Read the book →](/books/serde-ubj/)
+
+ 
